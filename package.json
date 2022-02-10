@@ -1,0 +1,23 @@
+{
+  "name": "gitstats",
+  "version": "0.0.1",
+  "description": "Git Stats",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vladmandic/gitstats.git"
+  },
+  "author": "Vladimir Mandic <mandic00@live.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vladmandic/gitstats/issues"
+  },
+  "homepage": "https://github.com/vladmandic/gitstats#readme",
+  "dependencies": {
+    "@vladmandic/pilogger": "^0.4.2",
+    "superagent": "^7.1.1"
+  }
+}
