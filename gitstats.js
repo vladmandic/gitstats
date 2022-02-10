@@ -1,7 +1,10 @@
+#!/usr/bin/env node
+
 const superagent = require('superagent');
 const log = require('@vladmandic/pilogger');
 
 const config = require('./config.json');
+let topK = 4;
 
 async function github() {
   const http = async (url) => {
@@ -44,11 +47,12 @@ async function github() {
 async function main() {
   const repos = await github();
   log.data('all', repos);
+  if (topK > repos.length) topK = repos.length;
   log.data('with issues', repos.filter((r) => r.issues > 0));
-  log.data('most stars', repos.sort((a, b) => b.stars - a.stars).slice(0, 3));
-  log.data('most forks', repos.sort((a, b) => b.forks - a.forks).slice(0, 3));
-  log.data('last updated', repos.sort((a, b) => b.updated - a.updated).slice(0, 3));
-  log.data('largest', repos.sort((a, b) => b.size - a.size).slice(0, 3));
+  log.data('most stars', repos.sort((a, b) => b.stars - a.stars).slice(0, topK));
+  log.data('most forks', repos.sort((a, b) => b.forks - a.forks).slice(0, topK));
+  log.data('last updated', repos.sort((a, b) => b.updated - a.updated).slice(0, topK));
+  log.data('largest', repos.sort((a, b) => b.size - a.size).slice(0, topK));
 }
 
 main();
