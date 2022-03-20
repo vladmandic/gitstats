@@ -4,7 +4,7 @@
   "description": "Git Stats",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./gitstats.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/vladmandic/gitstats#readme",
   "dependencies": {
-    "@vladmandic/pilogger": "^0.4.2",
+    "@vladmandic/pilogger": "^0.4.4",
     "superagent": "^7.1.1"
   }
 }

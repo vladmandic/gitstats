@@ -4,7 +4,7 @@ const superagent = require('superagent');
 const log = require('@vladmandic/pilogger');
 
 const config = require('./config.json');
-let topK = 4;
+let topK = 20;
 
 async function github() {
   const http = async (url) => {
@@ -23,8 +23,8 @@ async function github() {
     return (Array.isArray(json)) ? { ...json } : json;
   };
 
-  const listObjects = await http(`https://api.github.com/user/repos`);
-  const list = Object.values(listObjects).filter((r) => r.permissions.admin);
+  const listObjects = await http('https://api.github.com/user/repos?visibility=all&per_page=100');
+  const list = Object.values(listObjects);
   const size = list.reduce((prev, curr) => prev += curr.size, 0);
   log.data({ user: config.github.user, repositories: list.length, size });
   const repos = [];
@@ -34,25 +34,27 @@ async function github() {
       name: r.full_name,
       public: r.visibility === 'public' ? true : false,
       created: new Date(r.created_at),
-      updated: new Date(r.updated_at),
+      updated: new Date(r.pushed_at),
       size: r.size,
       stars: r.stargazers_count,
       forks: r.forks_count,
       issues: r.open_issues_count,
     });
   }
+  console.log('REPOS', repos.length);
   return repos;
 }
 
 async function main() {
   const repos = await github();
-  log.data('all', repos);
+  log.data('all', { count: repos.length}, repos);
   if (topK > repos.length) topK = repos.length;
-  log.data('with issues', repos.filter((r) => r.issues > 0));
-  log.data('most stars', repos.sort((a, b) => b.stars - a.stars).slice(0, topK));
-  log.data('most forks', repos.sort((a, b) => b.forks - a.forks).slice(0, topK));
-  log.data('last updated', repos.sort((a, b) => b.updated - a.updated).slice(0, topK));
-  log.data('largest', repos.sort((a, b) => b.size - a.size).slice(0, topK));
+  const reposWithIssues = repos.filter((r) => r.issues > 0);
+  log.data('with issues', { count: reposWithIssues.length }, reposWithIssues);
+  log.data('most stars', { topK }, repos.sort((a, b) => b.stars - a.stars).slice(0, topK));
+  log.data('most forks', { topK }, repos.sort((a, b) => b.forks - a.forks).slice(0, topK));
+  log.data('last updated', { topK }, repos.sort((a, b) => b.updated - a.updated).slice(0, topK));
+  log.data('largest', { topK }, repos.sort((a, b) => b.size - a.size).slice(0, topK));
 }
 
 main();
