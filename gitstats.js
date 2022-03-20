@@ -41,7 +41,6 @@ async function github() {
       issues: r.open_issues_count,
     });
   }
-  console.log('REPOS', repos.length);
   return repos;
 }
 
