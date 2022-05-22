@@ -1,6 +1,4 @@
-# gitstats
-
-[GitHub](github.com) and [NPMjs](npmjs.com) Stats
+# [GitHub](github.com) and [NPMjs](npmjs.com) Stats
 
 ## Usage
 
@@ -30,4 +28,31 @@ To use, create `config.json` with the following structure:
   ...
 ]
 2022-05-22 11:47:22 DATA:  repositories with issues: { count: 0 } []
+```
+
+<br>
+
+# [NPMS](npms.io) Stats
+
+## Usage
+
+- Just run using package name as parameter or
+- Run without parameter in which case it will display all records for configured npmjs user (`config.npmjs.user`)
+
+
+## Sample output
+
+> ./npmsstats.js @vladmandic/human
+
+```js
+2022-05-22 12:43:05 DATA:  npms repository: {
+  name: '@vladmandic/human',
+  version: '2.7.2',
+  date: 2022-05-18T12:35:51.754Z,
+  analyzed: 2022-05-20T14:52:45.906Z,
+  score: 70,
+  quality: { score: 95, carefulness: 100, tests: 60, health: 100, branding: 100 },
+  popularity: { score: 19, community: 879, downloads: 2440, acceleration: 14.37 },
+  maintenance: { score: 100, releases: 100, commits: 100, issues: 100 },
+}
 ```
