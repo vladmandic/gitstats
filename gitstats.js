@@ -4,7 +4,10 @@ const superagent = require('superagent');
 const log = require('@vladmandic/pilogger');
 
 const config = require('./config.json');
+const npmjsRepositories = require('./npmstats.js').npmjsRepositories;
+
 let topK = 5;
+
 
 async function githubRepositories() {
   const http = async (url) => {
@@ -57,7 +60,10 @@ async function githubRepositories() {
 }
 
 async function main() {
-  const repos = await githubRepositories();
+  let repos;
+  repos = await npmjsRepositories();
+  log.data('npmjs repositories', repos);
+  repos = await githubRepositories();
   log.data('all repositories:', { count: repos.length}, repos);
   log.data('repositories with most stars:', { topK }, repos.sort((a, b) => b.stars - a.stars).slice(0, topK));
   log.data('repositories with most forks:', { topK }, repos.sort((a, b) => b.forks - a.forks).slice(0, topK));
