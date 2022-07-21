@@ -1,10 +1,10 @@
 {
   "name": "gitstats",
   "version": "0.0.1",
-  "description": "Git Stats",
+  "description": "GitHub / NPMjs / NPMs Stats",
   "main": "index.js",
   "scripts": {
-    "start": "node ./gitstats.js"
+    "start": "node ./stats.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/vladmandic/gitstats#readme",
   "dependencies": {
-    "@vladmandic/pilogger": "^0.4.4",
-    "superagent": "^7.1.1"
+    "@vladmandic/pilogger": "^0.4.5",
+    "superagent": "^8.0.0"
   }
 }

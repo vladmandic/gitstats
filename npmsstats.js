@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const process = require('process');
 const superagent = require('superagent');
 const log = require('@vladmandic/pilogger');
@@ -60,23 +58,8 @@ async function npmsRepositories() {
       repos.push(data);
     }
   }
-  const stats = {
-    user: config.npmjs.user,
-    repositories: repos.length,
-    weekly: repos.reduce((prev, curr) => prev += curr.weekly, 0),
-    monthly: repos.reduce((prev, curr) => prev += curr.monthly, 0),
-  };
-  log.data('npms stats:', stats)
+  // log.data('npms stats:', { user: config.npmjs.user, repositories: repos.length };)
   return repos;
 }
 
 exports.npmsRepositories = npmsRepositories;
-
-async function cli() {
-  if (process.argv.length === 3) {
-    const repo = await analyzeRepo(process.argv[2])
-    log.data('npms repository:', repo);
-  }
-}
-
-cli();

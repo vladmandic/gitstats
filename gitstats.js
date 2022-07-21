@@ -1,14 +1,7 @@
-#!/usr/bin/env node
-
 const superagent = require('superagent');
 const log = require('@vladmandic/pilogger');
 
 const config = require('./config.json');
-const npmjsRepositories = require('./npmjsstats.js').npmjsRepositories;
-const npmsRepositories = require('./npmsstats.js').npmsRepositories;
-
-let topK = 5;
-
 
 async function githubRepositories() {
   const http = async (url) => {
@@ -60,20 +53,4 @@ async function githubRepositories() {
   return repos;
 }
 
-async function main() {
-  let repos;
-  repos = await npmjsRepositories();
-  log.data('npmjs repositories:', { count: repos.length}, repos);
-  // repos = await npmsRepositories();
-  // log.data('npms repositories:', { count: repos.length}, repos);
-  repos = await githubRepositories();
-  log.data('all repositories:', { count: repos.length}, repos);
-  log.data('repositories with most stars:', { topK }, repos.sort((a, b) => b.stars - a.stars).slice(0, topK));
-  log.data('repositories with most forks:', { topK }, repos.sort((a, b) => b.forks - a.forks).slice(0, topK));
-  log.data('last updated repositories:', { topK }, repos.sort((a, b) => b.updated - a.updated).slice(0, topK));
-  log.data('largest repositories:', { topK }, repos.sort((a, b) => b.size - a.size).slice(0, topK));
-  const reposWithIssues = repos.filter((r) => r.issues > 0);
-  log.data('repositories with issues:', { count: reposWithIssues.length }, reposWithIssues);
-}
-
-main();
+exports.githubRepositories = githubRepositories;
