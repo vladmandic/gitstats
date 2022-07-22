@@ -1,22 +1,8 @@
-const superagent = require('superagent');
 const log = require('@vladmandic/pilogger');
+const http = require('./http.js').http;
 const config = require('./config.json');
 
 async function npmjsRepositories() {
-  const http = async (url) => {
-    let json = {};
-    try {
-      const res = await superagent
-        .get(url)
-        .set('content-type', 'application/json')
-        .set('user-agent', 'nodejs superagent/7.1.1')
-      json = JSON.parse(res.text);
-    } catch (err) {
-      log.error({ err });
-    }
-    return (Array.isArray(json)) ? { ...json } : json;
-  };
-
   const res = await http(`https://registry.npmjs.org/-/v1/search?text=@${config.npmjs.user}`);
   const repos = [];
   if (res && res.objects) {

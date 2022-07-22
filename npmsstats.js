@@ -1,21 +1,6 @@
 const process = require('process');
-const superagent = require('superagent');
-const log = require('@vladmandic/pilogger');
+const http = require('./http.js').http;
 const config = require('./config.json');
-
-const http = async (url) => {
-  let json = {};
-  try {
-    const res = await superagent
-      .get(url)
-      .set('content-type', 'application/json')
-      .set('user-agent', 'nodejs superagent/7.1.1')
-    json = JSON.parse(res.text);
-  } catch (err) {
-    log.error({ err });
-  }
-  return (Array.isArray(json)) ? { ...json } : json;
-};
 
 async function analyzeRepo(name, repo) {
   const data = await http(`https://api.npms.io/v2/package/${name.replace('/', '%2F')}`);

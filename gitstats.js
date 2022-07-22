@@ -1,6 +1,5 @@
 const superagent = require('superagent');
 const log = require('@vladmandic/pilogger');
-
 const config = require('./config.json');
 
 async function githubRepositories() {
