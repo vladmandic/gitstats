@@ -24,6 +24,7 @@ async function githubRepositories() {
   const repos = [];
   for (const r of Object.values(listObjects)) {
     if (!r.permissions.admin) continue
+    // const branches = await http(`https://api.github.com/repos/${r.full_name}/branches`);
     repos.push({
       name: r.full_name,
       public: r.visibility === 'public' ? true : false,
@@ -34,6 +35,7 @@ async function githubRepositories() {
       stars: r.stargazers_count,
       forks: r.forks_count,
       issues: r.open_issues_count,
+      // branches: Object.values(branches).length,
     });
   }
   const stats = {
