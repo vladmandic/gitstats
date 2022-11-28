@@ -7,6 +7,7 @@ const npmsRepositories = require('./npmsstats.js').npmsRepositories;
 const config = require('./config.json');
 
 async function main() {
+  log.configure({ inspect: { breakLength: 250 } });
   let repos;
 
   npmjsRepositories().then((repos) => {
