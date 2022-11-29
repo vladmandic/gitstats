@@ -7,7 +7,7 @@ async function analyzeRepo(name, repo) {
   return {
     name: repo?.package?.name || data.collected.metadata.name,
     version: repo?.package?.version || data.collected.metadata.version,
-    date: new Date(repo?.package?.date || data.collected.metadata.date),
+    // date: new Date(repo?.package?.date || data.collected.metadata.date),
     analyzed: new Date(data.analyzedAt),
     score: Math.round(100 * (repo?.score?.final || data.score.final)),
     quality: {
@@ -20,8 +20,8 @@ async function analyzeRepo(name, repo) {
     popularity: {
       score: Math.round(100 * (repo?.score?.detail?.popularity || data.score.detail.popularity)),
       community: data.evaluation.popularity.communityInterest,
-      downloads: Math.round(data.evaluation.popularity.downloadsCount),
-      acceleration: Math.round(100 * data.evaluation.popularity.downloadsAcceleration) / 100,
+      dl: Math.round(data.evaluation.popularity.downloadsCount),
+      accel: Math.round(100 * data.evaluation.popularity.downloadsAcceleration) / 100,
     },
     maintenance: {
       score: Math.round(100 * (repo?.score?.detail?.maintenance || data.score.detail.maintenance)),
@@ -43,7 +43,6 @@ async function npmsRepositories() {
       repos.push(data);
     }
   }
-  // log.data('npms stats:', { user: config.npmjs.user, repositories: repos.length };)
   return repos;
 }
 

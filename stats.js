@@ -7,7 +7,7 @@ const npmsRepositories = require('./npmsstats.js').npmsRepositories;
 const config = require('./config.json');
 
 async function main() {
-  log.configure({ inspect: { breakLength: 250 } });
+  log.configure({ inspect: { breakLength: 350 } });
   let repos;
 
   npmjsRepositories().then((repos) => {
@@ -15,7 +15,7 @@ async function main() {
   });
 
   npmsRepositories().then((repos) => {
-    log.data('npms repositories:', { count: repos.length }, repos.map((repo) => { return { name: repo.name, score: repo.score, search: repo.search, quality: repo.quality.score, popularity: repo.popularity.score, maintenance: repo.maintenance.score }; }));
+    log.data('npms repositories:', { count: repos.length }, repos);
   });
 
   githubRepositories().then((repos) => {
