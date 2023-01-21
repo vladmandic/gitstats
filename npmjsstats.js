@@ -15,6 +15,7 @@ async function npmjsRepositories() {
         version: repo.package?.version,
         date: new Date(repo.package?.date),
         downloads: {
+          day: Math.round(weekly.downloads / 7),
           week: weekly.downloads,
           month: monthly.downloads,
           year: yearly.downloads,
@@ -32,6 +33,7 @@ async function npmjsRepositories() {
     user: config.npmjs.user,
     repositories: repos.length,
     downloads: {
+      day: Math.round(repos.reduce((prev, curr) => prev += curr.downloads.week, 0) / 7),
       week: repos.reduce((prev, curr) => prev += curr.downloads.week, 0),
       month: repos.reduce((prev, curr) => prev += curr.downloads.month, 0),
       year: repos.reduce((prev, curr) => prev += curr.downloads.year, 0),

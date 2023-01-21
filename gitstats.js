@@ -21,10 +21,15 @@ async function githubRepositories() {
 
   const listObjects = await http('https://api.github.com/user/repos?visibility=all&per_page=100');
   const commits = await http(`https://api.github.com/search/commits?q=author:${config.github.user}`);
-  const repos = [];
+    const repos = [];
   for (const r of Object.values(listObjects)) {
     if (!r.permissions.admin) continue
-    // const branches = await http(`https://api.github.com/repos/${r.full_name}/branches`);
+    const branches = await http(`https://api.github.com/repos/${r.full_name}/branches`);
+    const pullsJson = await http(`https://api.github.com/repos/${r.full_name}/pulls?state=all`);
+    pulls = {}
+    for (const pull of Object.values(pullsJson)) {
+      pulls[pull.state] = pull.state in pulls ? pulls[pull.state] + 1 : 1
+    }
     repos.push({
       name: r.full_name,
       public: r.visibility === 'public' ? true : false,
@@ -35,7 +40,8 @@ async function githubRepositories() {
       stars: r.stargazers_count,
       forks: r.forks_count,
       issues: r.open_issues_count,
-      // branches: Object.values(branches).length,
+      branches: Object.values(branches).length,
+      pulls: pulls,
     });
   }
   const stats = {
