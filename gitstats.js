@@ -26,6 +26,8 @@ async function githubRepositories() {
     if (!r.permissions.admin) continue
     const branches = await http(`https://api.github.com/repos/${r.full_name}/branches`);
     const pullsJson = await http(`https://api.github.com/repos/${r.full_name}/pulls?state=all`);
+    clones = await http(`https://api.github.com/repos/${r.full_name}/traffic/clones?per=week`);
+    clones = clones.clones.map((c) => c.count).reduce((avg, value, _, { length }) => avg + value / length, 0);
     pulls = {}
     for (const pull of Object.values(pullsJson)) {
       pulls[pull.state] = pull.state in pulls ? pulls[pull.state] + 1 : 1
@@ -42,6 +44,7 @@ async function githubRepositories() {
       issues: r.open_issues_count,
       branches: Object.values(branches).length,
       pulls: pulls,
+      clones: Math.floor(clones),
     });
   }
   const stats = {
@@ -53,6 +56,7 @@ async function githubRepositories() {
     size: repos.reduce((prev, curr) => prev += curr.size, 0),
     stars: repos.reduce((prev, curr) => prev += curr.stars, 0),
     forked: repos.reduce((prev, curr) => prev += curr.forks, 0),
+    'clones/week': repos.reduce((prev, curr) => prev += curr.clones, 0),
     commits: commits.total_count,
     issues: repos.reduce((prev, curr) => prev += curr.issues, 0),
   };
