@@ -19,7 +19,15 @@ async function main() {
   });
 
   githubRepositories().then((repos) => {
-    log.data('github all repositories:', { count: repos.length}, repos);
+    const reposOrig = repos.filter((r) => !r.fork);
+    log.data('github repositories:', { count: reposOrig.length}, reposOrig);
+
+    const reposForks = repos.filter((r) => r.fork);
+    log.data('github forks:', { count: reposForks.length}, reposForks);
+
+    const reposPrivate = repos.filter((r) => !r.public);
+    log.data('github private repositories:', { count: reposPrivate.length}, reposPrivate);
+
     log.data('github repositories with most stars:', { topK: config.topK }, repos.sort((a, b) => b.stars - a.stars).slice(0, config.topK));
     log.data('github repositories with most forks:', { topK: config.topK }, repos.sort((a, b) => b.forks - a.forks).slice(0, config.topK));
     log.data('github repositories with most clones:', { topK: config.topK }, repos.sort((a, b) => b.clones - a.clones).slice(0, config.topK));
