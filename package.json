@@ -1,6 +1,6 @@
 {
   "name": "gitstats",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "GitHub / NPMjs / NPMs Stats",
   "main": "index.js",
   "scripts": {
