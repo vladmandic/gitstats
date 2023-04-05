@@ -1,18 +1,35 @@
 const log = require('@vladmandic/pilogger');
-const superagent = require('superagent');
 
-const http = async (url) => {
-  let json = {};
+const globalHeaders = {
+  'content-type': 'application/json',
+  'user-agent': 'nodejs/fetch',
+};
+
+const http = async (url, headers = {}) => {
   try {
-    const res = await superagent
-      .get(url)
-      .set('content-type', 'application/json')
-      .set('user-agent', 'nodejs superagent/7.1.1')
-    json = JSON.parse(res.text);
-  } catch (err) {
-    log.error(err.response ? { code: err.response.statusCode, text: err.response.text } : { status: err.status || err }, url);
+    const res = await fetch(url, { method: 'GET', headers: { ...globalHeaders, ...headers } })
+    if (res.status !== 200) {
+      const limit = res.headers.get('x-ratelimit-remaining');
+      if (limit && parseInt(limit) === 0) log.error({ ratelimit: url, date: new Date(1000 * parseInt(res.headers.get('x-ratelimit-reset'))) });
+      else log.error({ code: res.status, test: res.statusText, url })
+      return {};
+    }
+    const text = await res.text();
+    const json = JSON.parse(text);
+    return json;
+  } catch (e) {
+    log.error({ exception: e, url })
+    return {};
   }
-  return (Array.isArray(json)) ? { ...json } : json;
+};
+
+const head = async (url, headers = {}) => {
+  let json = {};
+  const res = await fetch(url, { method: 'GET', headers: { ...globalHeaders, ...headers } })
+  if (res.status !== 200) return {};
+  for (const h of res.headers) json[h[0]] = h[1];
+  return json;
 };
 
 exports.http = http;
+exports.head = head;

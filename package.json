@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/vladmandic/gitstats#readme",
   "dependencies": {
-    "@vladmandic/pilogger": "^0.4.6",
-    "superagent": "^8.0.0"
+    "@vladmandic/pilogger": "^0.4.7"
   }
 }

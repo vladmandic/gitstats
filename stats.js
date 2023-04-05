@@ -1,23 +1,17 @@
 #!/usr/bin/env node
 
 const log = require('@vladmandic/pilogger');
-const githubRepositories = require('./gitstats.js').githubRepositories;
-const npmjsRepositories = require('./npmjsstats.js').npmjsRepositories;
-const npmsRepositories = require('./npmsstats.js').npmsRepositories;
 const config = require('./config.json');
 
 async function main() {
-  log.configure({ inspect: { breakLength: 350 } });
-  let repos;
+  log.configure({ inspect: { breakLength: process.stdout.columns } });
 
+    const npmjsRepositories = require('./npmjsstats.js').npmjsRepositories;
   npmjsRepositories().then((repos) => {
     log.data('npmjs repositories:', { count: repos.length}, repos);
   });
 
-  npmsRepositories().then((repos) => {
-    log.data('npms repositories:', { count: repos.length }, repos);
-  });
-
+  const githubRepositories = require('./gitstats.js').githubRepositories;
   githubRepositories().then((repos) => {
     const reposOrig = repos.filter((r) => !r.fork);
     log.data('github repositories:', { count: reposOrig.length}, reposOrig);
@@ -31,6 +25,7 @@ async function main() {
     log.data('github repositories with most stars:', { topK: config.topK }, repos.sort((a, b) => b.stars - a.stars).slice(0, config.topK));
     log.data('github repositories with most forks:', { topK: config.topK }, repos.sort((a, b) => b.forks - a.forks).slice(0, config.topK));
     log.data('github repositories with most clones:', { topK: config.topK }, repos.sort((a, b) => b.clones - a.clones).slice(0, config.topK));
+    log.data('github repositories with most commits:', { topK: config.topK }, repos.sort((a, b) => b.commits - a.commits).slice(0, config.topK));
     log.data('github last updated repositories:', { topK: config.topK }, repos.sort((a, b) => b.updated - a.updated).slice(0, config.topK));
     log.data('github largest repositories:', { topK: config.topK }, repos.sort((a, b) => b.size - a.size).slice(0, config.topK));
 
@@ -43,6 +38,14 @@ async function main() {
     const reposWithIssues = repos.filter((r) => r.issues > 0);
     log.data('github repositories with issues:', { count: reposWithIssues.length }, reposWithIssues);
   });
+
+  /*
+  // npms.io is no longer maintained
+  const npmsRepositories = require('./npmsstats.js').npmsRepositories;
+  npmsRepositories().then((repos) => {
+    log.data('npms repositories:', { count: repos.length }, repos);
+  });
+  */
 }
 
 main();
