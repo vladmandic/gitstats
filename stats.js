@@ -22,12 +22,12 @@ async function main() {
     const reposPrivate = repos.filter((r) => !r.public);
     log.data('github private repositories:', { count: reposPrivate.length}, reposPrivate);
 
-    log.data('github repositories with most stars:', { topK: config.topK }, repos.sort((a, b) => b.stars - a.stars).slice(0, config.topK));
-    log.data('github repositories with most forks:', { topK: config.topK }, repos.sort((a, b) => b.forks - a.forks).slice(0, config.topK));
-    log.data('github repositories with most clones:', { topK: config.topK }, repos.sort((a, b) => b.clones - a.clones).slice(0, config.topK));
-    log.data('github repositories with most commits:', { topK: config.topK }, repos.sort((a, b) => b.commits - a.commits).slice(0, config.topK));
-    log.data('github last updated repositories:', { topK: config.topK }, repos.sort((a, b) => b.updated - a.updated).slice(0, config.topK));
-    log.data('github largest repositories:', { topK: config.topK }, repos.sort((a, b) => b.size - a.size).slice(0, config.topK));
+    log.data('github repos with most stars:', { topK: config.topK }, repos.sort((a, b) => b.stars - a.stars).slice(0, config.topK));
+    log.data('github repos with most forks:', { topK: config.topK }, repos.sort((a, b) => b.forks - a.forks).slice(0, config.topK));
+    log.data('github repos with most clones:', { topK: config.topK }, repos.sort((a, b) => b.clones - a.clones).slice(0, config.topK));
+    log.data('github repos with most commits:', { topK: config.topK }, repos.sort((a, b) => b.commits - a.commits).slice(0, config.topK));
+    log.data('github repos by last update:', { topK: config.topK }, repos.sort((a, b) => b.updated - a.updated).slice(0, config.topK));
+    log.data('github repos by size:', { topK: config.topK }, repos.sort((a, b) => b.size - a.size).slice(0, config.topK));
 
     const reposWithPulls = repos.filter((r) => r.pulls.open > 0);
     log.data('github repos with open prs:', { count: reposWithPulls.length }, reposWithPulls.sort((a, b) => b.branches - a.branches).slice(0, config.topK));
@@ -36,7 +36,7 @@ async function main() {
     log.data('github repos with branches:', { count: reposWithBranches.length }, reposWithBranches.sort((a, b) => b.branches - a.branches).slice(0, config.topK));
 
     const reposWithIssues = repos.filter((r) => r.issues > 0);
-    log.data('github repositories with issues:', { count: reposWithIssues.length }, reposWithIssues);
+    log.data('github repos with issues:', { count: reposWithIssues.length }, reposWithIssues);
   });
 
   /*
