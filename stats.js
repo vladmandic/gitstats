@@ -6,7 +6,7 @@ const config = require('./config.json');
 async function main() {
   log.configure({ inspect: { breakLength: process.stdout.columns } });
 
-    const npmjsRepositories = require('./npmjsstats.js').npmjsRepositories;
+  const npmjsRepositories = require('./npmjsstats.js').npmjsRepositories;
   npmjsRepositories().then((repos) => {
     log.data('npmjs repositories:', { count: repos.length}, repos);
   });

@@ -13,7 +13,7 @@ async function githubRepository(r) {
     const branches = await http(`https://api.github.com/repos/${r.full_name}/branches`, headers);
     const pullsJson = await http(`https://api.github.com/repos/${r.full_name}/pulls?state=all`, headers);
     const clonesJson = await http(`https://api.github.com/repos/${r.full_name}/traffic/clones?per=week`, headers);
-    const clones = clonesJson.clones.map((c) => c.count).reduce((avg, value, _, { length }) => avg + value / length, 0);
+    const clones = clonesJson.clones ? clonesJson.clones.map((c) => c.count).reduce((avg, value, _, { length }) => avg + value / length, 0) : 0;
     const headersJson = await head(`https://api.github.com/repos/${r.full_name}/commits?per_page=1`, headers); // get headers
     pulls = {}
     for (const pull of Object.values(pullsJson)) pulls[pull.state] = pull.state in pulls ? pulls[pull.state] + 1 : 1
