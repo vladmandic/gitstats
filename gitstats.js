@@ -50,7 +50,7 @@ async function githubRepositories() {
       page++;
     }
   }
-  fs.writeFileSync('repos.json', JSON.stringify(listObjects, null, 2));
+  // fs.writeFileSync('repos.json', JSON.stringify(listObjects, null, 2));
 
   const commits = await http(`https://api.github.com/search/commits?q=author:${config.github.user}`, headers);
   let repos = [];
