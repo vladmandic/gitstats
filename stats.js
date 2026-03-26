@@ -5,7 +5,6 @@ const config = require('./config.json');
 
 async function main() {
   log.configure({ inspect: { breakLength: process.stdout.columns } });
-
   const npmjsRepositories = require('./npmjsstats.js').npmjsRepositories;
   npmjsRepositories().then((repos) => {
     log.data('npmjs repositories:', { count: repos.length}, repos);
@@ -38,14 +37,6 @@ async function main() {
     const reposWithIssues = repos.filter((r) => r.issues > 0);
     log.data('github repos with issues:', { count: reposWithIssues.length }, reposWithIssues);
   });
-
-  /*
-  // npms.io is no longer maintained
-  const npmsRepositories = require('./npmsstats.js').npmsRepositories;
-  npmsRepositories().then((repos) => {
-    log.data('npms repositories:', { count: repos.length }, repos);
-  });
-  */
 }
 
 main();

@@ -1,3 +1,4 @@
+const fs = require('fs');
 const log = require('@vladmandic/pilogger');
 const config = require('./config.json');
 const http = require('./http.js').http;
@@ -29,6 +30,7 @@ async function githubRepository(r) {
       forks: r.forks_count,
       issues: r.open_issues_count,
       branches: Object.values(branches).length,
+      archived: r.archived,
       pulls: pulls,
       commits: parseInt(headersJson.link?.match(/\d+/g).pop() || '0'), // extract total commit count from pagination data
       clones: Math.floor(clones),
@@ -37,11 +39,23 @@ async function githubRepository(r) {
 }
 
 async function githubRepositories() {
-  const listObjects = await http('https://api.github.com/user/repos?visibility=all&per_page=100', headers);
+  let listObjects = [];
+  let keepFetching = true;
+  let page = 1;
+  while (keepFetching) {
+    const res = await http(`https://api.github.com/user/repos?visibility=all&per_page=50&page=${page}`, headers);
+    if (res.length === 0) keepFetching = false;
+    else {
+      listObjects = [...listObjects, ...res];
+      page++;
+    }
+  }
+  fs.writeFileSync('repos.json', JSON.stringify(listObjects, null, 2));
+
   const commits = await http(`https://api.github.com/search/commits?q=author:${config.github.user}`, headers);
   let repos = [];
-  for (const r of Object.values(listObjects)) {
-    if (!r.permissions.admin) continue
+  for (const r of listObjects) {
+    if (!r.permissions.admin && !r.full_name.startsWith(config.github.user)) continue
     const result = githubRepository(r);
     repos.push(result);
   }

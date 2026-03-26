@@ -24,11 +24,16 @@ const http = async (url, headers = {}) => {
 };
 
 const head = async (url, headers = {}) => {
-  let json = {};
-  const res = await fetch(url, { method: 'GET', headers: { ...globalHeaders, ...headers } })
-  if (res.status !== 200) return {};
-  for (const h of res.headers) json[h[0]] = h[1];
-  return json;
+  try {
+    let json = {};
+    const res = await fetch(url, { method: 'GET', headers: { ...globalHeaders, ...headers } })
+    if (res.status !== 200) return {};
+    for (const h of res.headers) json[h[0]] = h[1];
+    return json;
+  } catch (e) {
+    log.error({ exception: e, url })
+    return {};
+  }
 };
 
 exports.http = http;

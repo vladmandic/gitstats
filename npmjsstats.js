@@ -32,6 +32,7 @@ async function npmjsRepositories() {
   let repos = [];
   if (res && res.objects) {
     for (const repo of res.objects) {
+      if (!repo.package?.name?.startsWith(`@${config.npmjs.user}`)) continue;
       const result = npmjsRepositorie(repo);
       repos.push(result);
     }
